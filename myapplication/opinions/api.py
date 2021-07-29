@@ -3,7 +3,6 @@ from myapplication.models import Opinions
 from flask_restful import Resource, reqparse
 from myapplication import db
 from markupsafe import escape
-from myapplication.auth.auth import token_required
 
 
 class OpinionsApi(Resource):

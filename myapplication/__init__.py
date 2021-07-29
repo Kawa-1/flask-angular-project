@@ -1,4 +1,5 @@
 import os.path
+import os
 from flask import Flask, app, render_template, make_response, jsonify
 from flask_login import LoginManager, login_user
 from flask_sqlalchemy import SQLAlchemy
@@ -72,7 +73,8 @@ def create_app():
 
     @app.route('/elo', methods=['GET'])
     def elo():
-        return "elo", 200
+        x = f"served from {os.getpid()}"
+        return x
 
     @app.route('/hejka', methods=['GET'])
     def tryjson():

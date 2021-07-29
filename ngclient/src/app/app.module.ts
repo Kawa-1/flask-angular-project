@@ -1,4 +1,3 @@
-import { opinionReducer } from './services/opinion.reducer';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
@@ -6,7 +5,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { DataTableComponent } from './data-table/data-table.component';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
@@ -30,23 +28,13 @@ import { RecipesComponent } from './recipes/recipes.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { RecaptchaComponent } from './recaptcha/recaptcha.component';
 import { OpinionsComponent } from './opinions/opinions.component';
-import { TableComponent } from './table/table.component';
-import { SettingsComponent } from './settings/settings.component';
-import { TablesComponent } from './tables/tables.component';
+
 import { ChildComponent } from './child/child.component';
 import { ButtonsComponent } from './buttons/buttons.component';
-import { NewMapComponent } from './new-map/new-map.component';
-import { TestComponent } from './test/test.component';
 
-import { AuthService } from './services/auth.service';
 import { LoadMapService } from './services/load-map.service';
-import { SortDirective } from './table/directive/sort.directive';
+import { AuthService } from './services/auth.service';
 import { AuthInterceptor } from './services/auth.interceptor';
-import { counterReducer } from './services/counter.reducer';
-import { simpleReducer } from './services/simple.reducer';
-import { WebsocketService } from './services/websocket.service';
-import { ChatService } from './services/chat.service';
-import { OpinionEffects } from './effects/opinion.effects';
 
 @NgModule({
   declarations: [
@@ -62,15 +50,8 @@ import { OpinionEffects } from './effects/opinion.effects';
     NotFoundComponent,
     RecaptchaComponent,
     OpinionsComponent,
-    TableComponent,
-    SettingsComponent,
-    DataTableComponent,
     ButtonsComponent,
-    SortDirective,
-    TablesComponent,
     ChildComponent,
-    NewMapComponent,
-    TestComponent,
   ],
   imports: [
     FormsModule,
@@ -79,14 +60,7 @@ import { OpinionEffects } from './effects/opinion.effects';
     RecaptchaModule,
     BrowserModule,
     AppRoutingModule,
-    StoreModule.forRoot({
-      message: simpleReducer,
-      count: counterReducer,
-      opinions: opinionReducer
-    }),
-    EffectsModule.forRoot(
-      [OpinionEffects]
-    ),
+
     StoreDevtoolsModule.instrument({
       maxAge: 25
     }),
@@ -124,22 +98,6 @@ import { OpinionEffects } from './effects/opinion.effects';
         component: RegisterComponent
       },
       {
-        path: 'settings', 
-        component: SettingsComponent
-      },
-      {
-        path: 'tables', 
-        component: TablesComponent
-      },
-      {
-        path: 'new-map', 
-        component: NewMapComponent
-      },
-      {
-        path: 'test', 
-        component: TestComponent
-      },  
-      {
         path: '**', 
         component: NotFoundComponent
       }
@@ -157,13 +115,6 @@ import { OpinionEffects } from './effects/opinion.effects';
     AuthService, 
     CookieService, 
     LoadMapService,
-    ChatService,
-    WebsocketService,
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: AuthInterceptor,
-      multi: true
-    }
   ],
   bootstrap: [AppComponent]
 })

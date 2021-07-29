@@ -87,7 +87,16 @@ export class AuthService {
       'Content-Type': 'application/json',
       Authorization: `ID ${id}`  
     });
-    return this.http.post(url, {headers: headers}).toPromise();
+    return this.http.delete(url, {headers: headers}).toPromise();
+  }
+
+  deleteOpinions(id:any): Promise<any> {
+    let url: string = "http://localhost:5000/api/opinionsdelete";
+    let headers: HttpHeaders = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Authorization: `ID ${id}`  
+    });
+    return this.http.delete(url, {headers: headers}).toPromise();
   }
 
   register(form:FormData) {

@@ -42,26 +42,52 @@ export class YourProfileComponent implements OnInit {
     }
   }
 
+  deleteRecipe(id:any, recipe:any){
+    this.auth.deleteRecipe(id)
+    .then((response) => {
+      if (response.status === 'success') {
+        this.toastr.success('Deleted succesfully');
+        }
+    })
+    recipe.check = false;
+  }
+
+  deleteOpinion(id:any, opinion:any){
+    this.auth.deleteOpinions(id)
+    .then((response) => {
+      if (response.status === 'success') {
+        this.toastr.success('Deleted succesfully');
+        }
+    })
+    opinion.check = false;
+  }
+
   clickedRecipes(){
     this.hideOpinions = true;
+    this.hideRecipes = false; 
     this.auth.getRecipesByID(this.user_id)
     .then((recipes) => {
       if (recipes.status === 'success') {
         this.recipes = recipes.data;
+        for (let i in this.recipes){
+          this.recipes[i].check = true;
         }
+      }
     })
-    this.hideRecipes = false;
   }
 
   clickedOpinions(){
     this.hideRecipes = true;
+    this.hideOpinions = false;
     this.auth.getOpinionsByID(this.user_id)
     .then((opinions) => {
       if (opinions.status === 'success') {
         this.opinions = opinions.data;
+        for (let i in this.opinions){
+          this.opinions[i].check = true;
+        }
       }
     })
-    this.hideOpinions = false;
   }
 
   logout(){

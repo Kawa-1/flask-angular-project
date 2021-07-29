@@ -1,6 +1,6 @@
+import { ToastrService } from 'ngx-toastr';
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from "@angular/common/http";
-import { timer } from 'rxjs';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-register',
@@ -9,12 +9,7 @@ import { timer } from 'rxjs';
 })
 
 export class RegisterComponent implements OnInit{ 
-  constructor( private http: HttpClient ) {}
-
-  labelSuccessHidden = true;
-  labelErrorHidden = true;
-  public labelSuccessText:any;
-  public labelErrorText:any;
+  constructor( private toastr: ToastrService, private auth: AuthService ) {}
  
   isDisabled = true;
   passwordPattern: string;
@@ -31,19 +26,10 @@ export class RegisterComponent implements OnInit{
     formData.append("password", password);
     formData.append("repeatPassword", repeatPassword);
 
-    this.http.post('http://localhost:5000/api/register', formData)
+    this.auth.register(formData)
     .subscribe(
       data => {
-        this.labelErrorHidden = true;
-        this.labelSuccessText = "Registered succesfully";
-        this.labelSuccessHidden = false;
-        timer(3000).subscribe(x => { this.labelSuccessHidden = true; })
-      },
-      err => {
-        this.labelSuccessHidden = true;
-        this.labelErrorText = "Email already in use";
-        this.labelErrorHidden = false;
-        timer(3000).subscribe(x => { this.labelErrorHidden = true; })
+          this.toastr.success('Registered successfully');
       });
 
     formData.delete("email");

@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../services/auth.service';
 import { MyToken } from '../models/MyToken';
 import { timer} from 'rxjs';
-import { Router, NavigationEnd,ActivatedRoute } from '@angular/router';
+import { CookieService } from 'ngx-cookie-service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-your-profile',
@@ -11,12 +12,8 @@ import { Router, NavigationEnd,ActivatedRoute } from '@angular/router';
 })
 export class YourProfileComponent implements OnInit {
   isLoggedIn: boolean = false;
-  labelSuccessHidden = true;
-  labelErrorHidden = true;
   hideOpinions = true;
   hideRecipes = true;
-  public labelSuccessText:any;
-  public labelErrorText:any;
   public usersUsername:any;
   public user_id:any;
   public opinions:any;
@@ -24,9 +21,9 @@ export class YourProfileComponent implements OnInit {
 
   myToken: MyToken = new MyToken();
   
-  constructor(private auth: AuthService) {}
+  constructor(private auth: AuthService, private cookieService: CookieService, private toastr: ToastrService ) {}
   ngOnInit(): void {
-    const token = localStorage.getItem('token');
+    const token = this.cookieService.get('token');
     if (token) {
       this.auth.ensureAuthenticated(token)
       .then((user) => {
@@ -45,54 +42,64 @@ export class YourProfileComponent implements OnInit {
     }
   }
 
+  deleteRecipe(id:any, recipe:any){
+    this.auth.deleteRecipe(id)
+    .then((response) => {
+      if (response.status === 'success') {
+        this.toastr.success('Deleted succesfully');
+        }
+    })
+    recipe.check = false;
+  }
+
+  deleteOpinion(id:any, opinion:any){
+    this.auth.deleteOpinions(id)
+    .then((response) => {
+      if (response.status === 'success') {
+        this.toastr.success('Deleted succesfully');
+        }
+    })
+    opinion.check = false;
+  }
+
   clickedRecipes(){
     this.hideOpinions = true;
+    this.hideRecipes = false; 
     this.auth.getRecipesByID(this.user_id)
     .then((recipes) => {
       if (recipes.status === 'success') {
         this.recipes = recipes.data;
-        console.log(recipes.data)
+        for (let i in this.recipes){
+          this.recipes[i].check = true;
+        }
       }
     })
-    .catch((err) => {
-      console.log(err)
-    });
-    this.hideRecipes = false;
   }
 
   clickedOpinions(){
     this.hideRecipes = true;
+    this.hideOpinions = false;
     this.auth.getOpinionsByID(this.user_id)
     .then((opinions) => {
       if (opinions.status === 'success') {
         this.opinions = opinions.data;
+        for (let i in this.opinions){
+          this.opinions[i].check = true;
+        }
       }
     })
-    .catch((err) => {
-      console.log(err)
-    });
-    this.hideOpinions = false;
   }
 
   logout(){
-    this.myToken.token = localStorage.getItem('token');
+    this.myToken.token = this.cookieService.get('token');
     if (this.myToken) {
       this.auth.logout(this.myToken)
       .then((data) => {
         if (data.status === 'success') {
-          this.labelErrorHidden = true;
-          this.labelSuccessText = "Logged out succesfully";
-          this.labelSuccessHidden = false;
-          timer(1500).subscribe(x => { this.labelSuccessHidden = true; })
+          this.toastr.success('Logged out successfully');
           timer(1500).subscribe(x => { this.isLoggedIn = false;})
-          localStorage.removeItem('token')
+          this.cookieService.delete('token')
         }
-      })
-      .catch((err) => {
-        this.labelSuccessHidden = true;
-        this.labelErrorText = err.error.message;
-        this.labelErrorHidden = false;
-        timer(3000).subscribe(x => { this.labelErrorHidden = true; })
       });
     }
   }

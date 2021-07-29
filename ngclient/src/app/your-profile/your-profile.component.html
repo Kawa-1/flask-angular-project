@@ -12,8 +12,6 @@
     </div>
     <button class="btn btn-primary" id="logout" (click)="logout()">Logout</button>
     <br>
-    <label class="label-success" id="label-success" [hidden]="labelSuccessHidden">{{labelSuccessText}}</label>
-    <label class="label-error" id="label-error" [hidden]="labelErrorHidden">{{labelErrorText}}</label>
     <div class="nav-repair">
         <div class="container-fluid">
           <nav class="navbar navbar-inverse">
@@ -26,8 +24,8 @@
           </nav>
         </div>
     </div>
-    <div class="show-stuff" [hidden]="hideOpinions">
-        <li *ngFor="let opinion of opinions">
+    <div *ngFor="let opinion of opinions">
+        <div class="show-stuff" *ngIf="!hideOpinions && opinion.check">
             Opinion by: {{opinion.username}}
             <br>
             City: {{opinion.city_of_restaurant}}
@@ -39,17 +37,21 @@
             Opinion:
             <textarea class="show-opinion" cols="1" rows="10" [disabled]="true">{{opinion.opinion}}</textarea>
             <br>
-        </li>
+            <button class="btn btn-primary" (click)="deleteOpinion(opinion.id, opinion)">Delete</button>
+            <br><br><br>
+        </div>
     </div>
-    <div class="show-stuff" [hidden]="hideRecipes">
-        <li *ngFor="let recipe of recipes">
+    <div *ngFor="let recipe of recipes">
+        <div class="show-stuff" *ngIf="!hideRecipes && recipe.check">
             Recipe by: {{recipe.username}}
             <br>
             Tags: {{recipe.tags}}
             <br>
             Recipe:
-          <textarea class="show-recipes" cols="1" rows="10" [disabled]="true">{{recipe.recipe}}</textarea>
-          <br>
-        </li>
+            <textarea class="show-recipes" cols="1" rows="10" [disabled]="true">{{recipe.recipe}}</textarea>
+            <br>
+            <button class="btn btn-primary" (click)="deleteRecipe(recipe.id, recipe)">Delete</button> 
+            <br><br><br>
+        </div>
     </div>
 </div>

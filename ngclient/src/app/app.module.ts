@@ -1,11 +1,20 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { AgmCoreModule } from '@agm/core';
 import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
+
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSortModule } from '@angular/material/sort';
 import { AppRoutingModule } from './app-routing.module';
 import { RecaptchaModule } from "ng-recaptcha";
-import { HttpClientModule } from "@angular/common/http";
+import { CookieService } from 'ngx-cookie-service';
+import { ToastrModule } from 'ngx-toastr';
+import { StoreModule } from '@ngrx/store';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { EffectsModule } from '@ngrx/effects';
 
 import { AppComponent } from './app.component';
 import { RestaurantsComponent } from './restaurants/restaurants.component';
@@ -20,7 +29,12 @@ import { NotFoundComponent } from './not-found/not-found.component';
 import { RecaptchaComponent } from './recaptcha/recaptcha.component';
 import { OpinionsComponent } from './opinions/opinions.component';
 
+import { ChildComponent } from './child/child.component';
+import { ButtonsComponent } from './buttons/buttons.component';
+
+import { LoadMapService } from './services/load-map.service';
 import { AuthService } from './services/auth.service';
+import { AuthInterceptor } from './services/auth.interceptor';
 
 @NgModule({
   declarations: [
@@ -36,6 +50,8 @@ import { AuthService } from './services/auth.service';
     NotFoundComponent,
     RecaptchaComponent,
     OpinionsComponent,
+    ButtonsComponent,
+    ChildComponent,
   ],
   imports: [
     FormsModule,
@@ -44,8 +60,9 @@ import { AuthService } from './services/auth.service';
     RecaptchaModule,
     BrowserModule,
     AppRoutingModule,
-    AgmCoreModule.forRoot({
-      apiKey: 'AIzaSyD6WQvbBUddYIN5o2wHrk4vJs-ZBT18StY'
+
+    StoreDevtoolsModule.instrument({
+      maxAge: 25
     }),
     RouterModule.forRoot([
       {
@@ -84,9 +101,21 @@ import { AuthService } from './services/auth.service';
         path: '**', 
         component: NotFoundComponent
       }
-    ],{ onSameUrlNavigation: 'reload' })
+    ],{ onSameUrlNavigation: 'reload' }),
+    BrowserAnimationsModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatSortModule,
+    ToastrModule.forRoot({
+      timeOut:2000,
+      preventDuplicates: true
+    })
   ],
-  providers: [AuthService],
+  providers: [
+    AuthService, 
+    CookieService, 
+    LoadMapService,
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

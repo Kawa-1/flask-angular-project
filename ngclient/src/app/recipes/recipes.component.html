@@ -5,7 +5,7 @@
 </div>
 
 <div class="show-stuff">
-    <li *ngFor="let recipe of recipes">
+    <div *ngFor="let recipe of recipes">
       Recipe by: {{recipe.username}}
       <br>
       Tags: {{recipe.tags}}
@@ -13,5 +13,5 @@
       Recipe:
       <textarea class="show-recipes" cols="1" rows="10" [disabled]="true">{{recipe.recipe}}</textarea>
       <br>
-    </li>
+    </div>
 </div>

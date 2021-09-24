@@ -28,7 +28,7 @@ class RegisterApi(Resource):
             return {'message': {'email': 'No email provided'}}, 400
 
         if check_email(email) is False:
-            return {'message': {'email': 'incorrect email'}}
+            return {'message': {'email': 'incorrect email'}}, 400
 
         if firstName == '':
             return {'message': {'firstname': 'No first name provided'}}, 400

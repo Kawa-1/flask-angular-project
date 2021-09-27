@@ -71,35 +71,6 @@ def create_app():
     from myapplication.users import users as bp_users
     app.register_blueprint(bp_users)
 
-    @app.route('/elo', methods=['GET'])
-    def elo():
-        x = f"served from {os.getpid()}"
-        return x
-
-    @app.route('/hejka', methods=['GET'])
-    def tryjson():
-        #x = Users(email="sdad@", first_name="hej", last_name='lastXD', username="username", password="admin1")
-        x = Users.query.filter_by(email="kamil@wp.pl").first()
-        #print(x.email)
-        #db.session.add(x)
-        #db.session.commit()
-        #users = Users.query.all()
-        #print(x)
-        if x:
-            return jsonify(x), 200
-            #return {"message": "hej"}, 200
-        else:
-            return "hejka"
-
-    class HelloWorld(Resource):
-        def get(self):
-            return {"data": "got"}
-        
-        def post(self):
-            return {"data": "posted"}
-
-    api.add_resource(HelloWorld, "/xd")
-
     return app
 
 

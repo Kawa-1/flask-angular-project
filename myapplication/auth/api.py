@@ -21,6 +21,7 @@ class RegisterApi(Resource):
 
         user = Users.query.filter_by(email=email).first()
 
+        # It is not secure solution but made only for research purposes
         if user:
             return {'message': {'email': 'This email already exists'}}, 400
 
